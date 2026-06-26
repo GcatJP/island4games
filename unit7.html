@@ -395,7 +395,7 @@
     <div class="wrap">
       <div class="header">
         <a class="reset-btn" href="index.html">⬅️ Back</a>
-        <h1>Unit 1</h1>
+        <h1>Unit 7</h1>
         <button class="reset-btn" id="resetBtn">Play Again 🏔️</button>
       </div>
 
@@ -406,6 +406,7 @@
       <div class="win-card">
         <div class="win-emojis">🏔️ Well Done! 🏔️</div>
         <h2>You found all the pairs!</h2>
+
         <p id="winStats">Adventure Island</p>
         <button class="reset-btn" id="playAgainBtn">Play Again 🏔️</button>
       </div>
@@ -414,16 +415,15 @@
     <script>
       /* ---- PAIRS — replace with your real image paths / words ---- */
       const PAIRS = [
-        { img: "images/choose.png", word: "choose" },
-        { img: "images/bedroom.png", word: "bedroom" },
-        { img: "images/food.png", word: "food" },
-        { img: "images/ride.png", word: "ride" },
-        { img: "images/headache.png", word: "headache" },
-        { img: "images/cough.png", word: "cough" },
-        { img: "images/stomachache.png", word: "stomachace" },
-        { img: "images/runny.png", word: "runny nose" },
+        { word: "Who", word2: "is she?" },
+        { word: "What", word2: "is that?" },
+        { word: "When", word2: "is your birthday?" },
+        { word: "Where", word2: "do you live?" },
+        { word: "Why", word2: "do you like cats?" },
+        { word: "How", word2: "do you go to school?" },
+        { word: "What are", word2: "they?" },
+        { word: "Do you", word2: "like homework?" },
       ];
-
       /* ---- audio ---- */
       let audioCtx = null;
       function getCtx() {
@@ -476,8 +476,8 @@
       function buildDeck() {
         let cards = [];
         PAIRS.forEach((p, idx) => {
-          cards.push({ pairId: idx, type: "image", value: p.img });
           cards.push({ pairId: idx, type: "word", value: p.word });
+          cards.push({ pairId: idx, type: "word2", value: p.word2 });
         });
         for (let i = cards.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -494,7 +494,7 @@
           el.className = "card";
           el.dataset.index = i;
 
-          const inner = document.createElement("div");
+          const inner = document.createElement("div"); // ← was missing
           inner.className = "card-inner";
 
           const back = document.createElement("div");
@@ -503,19 +503,13 @@
 
           const front = document.createElement("div");
           front.className = "face face-front";
-          if (card.type === "image") {
-            const img = document.createElement("img");
-            img.src = card.value;
-            img.alt = "";
-            front.appendChild(img);
-          } else {
-            const span = document.createElement("div");
-            span.className = "word";
-            span.textContent = card.value;
-            front.appendChild(span);
-          }
 
-          inner.appendChild(back);
+          const span = document.createElement("div");
+          span.className = "word";
+          span.textContent = card.value;
+          front.appendChild(span);
+
+          inner.appendChild(back); // ← only once
           inner.appendChild(front);
           el.appendChild(inner);
           el.addEventListener("click", () => onCardClick(el, card));
